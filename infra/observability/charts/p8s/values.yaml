@@ -1,0 +1,20 @@
+global:
+  imagePullSecrets:
+    - name: regcred
+persistence:
+  enabled: true
+  storageClassName: csi-disk-topology
+server:
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+  replicaCount: 1
+  statefulSet:
+    enabled: true
+# extraScrapeConfigs: |
+  # - job_name: node-exporter
+    # relabel_configs:
+    # - action: replace
+      # source_labels: [ __meta_kubernetes_pod_node_name]
+      # target_label: nodename
