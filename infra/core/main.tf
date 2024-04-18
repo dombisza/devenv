@@ -44,4 +44,13 @@ module "cce" {
   subnet_id = module.vpc.subnet_id
   node_flavor = "c4.xlarge.2"
   key_name = module.key.key_name
+  scale_enabled = true
+}
+
+module "dns" {
+  source = "./dns"
+  domain = "sdombi.hu."
+  email = "dombisza@gmail.com"
+  sub_domain = "rnd-grafana"
+  elb_ip = "80.158.92.170"
 }

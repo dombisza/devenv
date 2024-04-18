@@ -1,6 +1,6 @@
 #!/bin/bash
-echo "Unsetting Loki env variables..."
-unset LOKI_AK; unset LOKI_SK; unset LOKI_S3; unset LOKI_REGION; unset LOKI_S3_EP
+#echo "Unsetting Loki env variables..."
+#unset LOKI_AK; unset LOKI_SK; unset LOKI_S3; unset LOKI_REGION; unset LOKI_S3_EP
 export LOKI_AK=$(terraform -chdir=./terraform show -json | jq -r '.values.root_module.resources[] | select(.address == "opentelekomcloud_identity_credential_v3.this").values.access') \
   && echo "Successfully loaded LOKI_AK" || echo "Failed to load LOKI_AK"
 export LOKI_SK=$(terraform -chdir=./terraform show -json | jq -r '.values.root_module.resources[] | select(.address == "opentelekomcloud_identity_credential_v3.this").values.secret') \

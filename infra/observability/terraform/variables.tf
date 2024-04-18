@@ -16,7 +16,7 @@ variable "region" {
 
 variable "loki_user" {
   type    = string
-  default = "loki2obs"
+  default = "loki-2-obs"
 }
 
 variable "loki_user_desc" {
