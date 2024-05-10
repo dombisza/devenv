@@ -46,6 +46,7 @@ module "cce" {
   key_name = module.key.key_name
   scale_enabled = true
   node_os = "HCE OS 2.0"
+  cnt = "overlay_l2"
 }
 
 module "dns" {
