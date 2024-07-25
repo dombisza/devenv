@@ -2,12 +2,12 @@
 terraform {
   required_version = "<=1.5.5, >=v1.4.6"
   backend "s3" {
-    endpoint                    = "obs.eu-de.otc.t-systems.com"
-    bucket                      = "sdombi-dev-tfstate"
+    endpoint                    = "obs.eu-nl.otc.t-systems.com"
+    bucket                      = "sdombi-rnd-state"
     key                         = "personal/obs-services"
     skip_region_validation      = true
     skip_credentials_validation = true
-    region                      = "eu-de"
+    region                      = "eu-nl"
    }
    required_providers {
      opentelekomcloud = {

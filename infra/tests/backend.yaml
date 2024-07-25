@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-target
+spec:
+  replicas: 20
+  selector:
+    matchLabels:
+      app: backend-target
+  template:
+    metadata:
+      labels:
+        app: backend-target
+    spec:
+      initContainers:
+      - name: init-downloader
+        image: curlimages/curl:latest
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            for i in $(seq 1 6); do
+              curl -o /usr/share/nginx/html/$i.jpg https://sdombi-proxies-1234.obs.eu-de.otc.t-systems.com/$i.jpg || exit 1;
+            done
+        volumeMounts:
+        - name: nginx-html
+          mountPath: /usr/share/nginx/html
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: nginx-html
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: nginx-html
+        emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-target-service
+spec:
+  selector:
+    app: backend-target
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP

@@ -2,7 +2,7 @@ data "opentelekomcloud_identity_project_v3" "current" {}
 
 variable "azs" {
   type = list
-  default = ["eu-de-01", "eu-de-02"]
+  default = ["eu-nl-01", "eu-nl-02"]
 }
 
 variable "metrics_version" {
@@ -59,9 +59,9 @@ variable "scale_enabled" {
 variable "scaling" {
   type = map(number)
   default = {
-    start = 1
-    min = 1
-    max = 3
+    start = 2
+    min = 2
+    max = 2
   }
 }
 

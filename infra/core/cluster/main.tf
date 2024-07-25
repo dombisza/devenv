@@ -38,11 +38,11 @@ resource "opentelekomcloud_cce_node_pool_v3" "this" {
   flavor                   = var.node_flavor
   key_pair                 = var.key_name
   scale_enable             = var.scale_enabled
-  initial_node_count       = var.scale_enabled ? var.scaling["start"] : null
-  min_node_count           = var.scale_enabled ? var.scaling["min"] : null
-  max_node_count           = var.scale_enabled ? var.scaling["max"] : null
-  scale_down_cooldown_time = 100
-  priority                 = 1
+  initial_node_count       = var.scaling["start"]
+  min_node_count           = var.scaling["min"]
+  max_node_count           = var.scaling["max"]
+  scale_down_cooldown_time = var.scale_enabled ? 100 : null
+  priority                 = var.scale_enabled ? 1 : null
   runtime                  = "containerd"
   lifecycle {
     create_before_destroy = true
@@ -94,33 +94,33 @@ resource "opentelekomcloud_cce_addon_v3" "metrics" {
 
 
 #https://github.com/iits-consulting/terraform-opentelekomcloud-project-factory/blob/master/modules/cce/addons.tf
-resource "opentelekomcloud_cce_addon_v3" "autoscaler" {
-  template_name    = data.opentelekomcloud_cce_addon_template_v3.autoscaler.addon_name
-  template_version = data.opentelekomcloud_cce_addon_template_v3.autoscaler.addon_version
-  cluster_id       = opentelekomcloud_cce_cluster_v3.this.id
-
-  values {
-    basic = {
-      swr_addr = data.opentelekomcloud_cce_addon_template_v3.autoscaler.swr_addr
-      swr_user = data.opentelekomcloud_cce_addon_template_v3.autoscaler.swr_user
-    }
-    custom = {
-      "cluster_id"                    = opentelekomcloud_cce_cluster_v3.this.id
-      "tenant_id"                     = data.opentelekomcloud_identity_project_v3.current.id
-      "coresTotal"                    = 16000
-      "expander"                      = "priority"
-      "logLevel"                      = 4
-      "maxEmptyBulkDeleteFlag"        = 11
-      "maxNodesTotal"                 = 6
-      "memoryTotal"                   = 64000
-      "scaleDownDelayAfterAdd"        = 15
-      "scaleDownDelayAfterDelete"     = 15
-      "scaleDownDelayAfterFailure"    = 3
-      "scaleDownEnabled"              = true
-      "scaleDownUnneededTime"         = 7
-      "scaleUpUnscheduledPodEnabled"  = true
-      "scaleUpUtilizationEnabled"     = true
-      "unremovableNodeRecheckTimeout" = 7
-    }
-  }
-}
+# resource "opentelekomcloud_cce_addon_v3" "autoscaler" {
+  # template_name    = data.opentelekomcloud_cce_addon_template_v3.autoscaler.addon_name
+  # template_version = data.opentelekomcloud_cce_addon_template_v3.autoscaler.addon_version
+  # cluster_id       = opentelekomcloud_cce_cluster_v3.this.id
+#
+  # values {
+    # basic = {
+      # swr_addr = data.opentelekomcloud_cce_addon_template_v3.autoscaler.swr_addr
+      # swr_user = data.opentelekomcloud_cce_addon_template_v3.autoscaler.swr_user
+    # }
+    # custom = {
+      # "cluster_id"                    = opentelekomcloud_cce_cluster_v3.this.id
+      # "tenant_id"                     = data.opentelekomcloud_identity_project_v3.current.id
+      # "coresTotal"                    = 16000
+      # "expander"                      = "priority"
+      # "logLevel"                      = 4
+      # "maxEmptyBulkDeleteFlag"        = 11
+      # "maxNodesTotal"                 = 6
+      # "memoryTotal"                   = 64000
+      # "scaleDownDelayAfterAdd"        = 15
+      # "scaleDownDelayAfterDelete"     = 15
+      # "scaleDownDelayAfterFailure"    = 3
+      # "scaleDownEnabled"              = true
+      # "scaleDownUnneededTime"         = 7
+      # "scaleUpUnscheduledPodEnabled"  = true
+      # "scaleUpUtilizationEnabled"     = true
+      # "unremovableNodeRecheckTimeout" = 7
+    # }
+  # }
+# }

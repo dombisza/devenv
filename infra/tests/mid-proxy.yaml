@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mid-proxy
+spec:
+  replicas: 20
+  selector:
+    matchLabels:
+      app: mid-proxy
+  template:
+    metadata:
+      labels:
+        app: mid-proxy
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: nginx-proxy-conf
+          mountPath: /etc/nginx/conf.d
+      volumes:
+      - name: nginx-proxy-conf
+        configMap:
+          name: mid-proxy-config
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mid-proxy-config
+data:
+  default.conf: |
+    server {
+        listen 80;
+        location / {
+            proxy_pass http://low-proxy-service.default.svc.cluster.local:80;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mid-proxy-service
+spec:
+  selector:
+    app: mid-proxy
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
+

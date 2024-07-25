@@ -3,7 +3,6 @@
 resource "opentelekomcloud_vpc_v1" "this" {
   name = "${var.prefix}-vpc"
   cidr = var.vpc_cidr
-  shared = true
   tags = var.tags
 }
 

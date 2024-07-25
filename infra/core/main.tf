@@ -16,6 +16,7 @@ module "vpc" {
   source = "./vpc"
   prefix = local.prefix
   tags = local.tags
+  region = var.region
 }
 
 module "natgw" {
@@ -33,7 +34,7 @@ module "bastion" {
   vpc_id = module.vpc.vpc_id
   subnet_id = module.vpc.subnet_id
   network_id = module.vpc.network_id
-  az = "eu-de-01"
+  az = "eu-nl-01"
   key_name = module.key.key_name
 }
 
@@ -42,17 +43,17 @@ module "cce" {
   prefix = local.prefix
   vpc_id = module.vpc.vpc_id
   subnet_id = module.vpc.subnet_id
-  node_flavor = "c4.xlarge.2"
+  node_flavor = "c4.3xlarge.2"
   key_name = module.key.key_name
-  scale_enabled = true
+  scale_enabled = false
   node_os = "HCE OS 2.0"
   cnt = "overlay_l2"
 }
 
-module "dns" {
-  source = "./dns"
-  domain = "sdombi.hu."
-  email = "dombisza@gmail.com"
-  sub_domain = "rnd-grafana"
-  elb_ip = "80.158.92.170"
-}
+# module "dns" {
+  # source = "./dns"
+  # domain = "sdombi.hu."
+  # email = "dombisza@gmail.com"
+  # sub_domain = "obs"
+  # elb_ip = "164.30.70.79"
+# }

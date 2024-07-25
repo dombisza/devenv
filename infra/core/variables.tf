@@ -20,6 +20,5 @@ variable "stage" {
 
 variable "region" {
   type    = string
-  default = "eu-de"
 }
 

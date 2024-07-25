@@ -19,7 +19,6 @@ variable "subnet_gw" {
 
 variable "region" {
   type    = string
-  default = "eu-de"
 }
 
 variable "tags" {}
