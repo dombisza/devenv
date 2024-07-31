@@ -43,7 +43,7 @@ module "cce" {
   prefix = local.prefix
   vpc_id = module.vpc.vpc_id
   subnet_id = module.vpc.subnet_id
-  node_flavor = "c4.3xlarge.2"
+  node_flavor = "c4.2xlarge.2"
   key_name = module.key.key_name
   scale_enabled = false
   node_os = "HCE OS 2.0"
