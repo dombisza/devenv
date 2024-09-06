@@ -5,6 +5,7 @@ repositories:
     url: https://prometheus-community.github.io/helm-charts
 releases:
   - name: loki
+    installed: false
     chart: grafana/loki
     version: 5.36.0
     namespace: logging
@@ -12,20 +13,21 @@ releases:
     - ./charts/loki/values.yaml
     set:
       - name: loki.storage.s3.secretAccessKey
-        value: {{ requiredEnv "LOKI_SK" }}
+        value: {{ env "LOKI_SK" }}
       - name: loki.storage.s3.accessKeyId
-        value: {{ requiredEnv "LOKI_AK" }}
+        value: {{ env "LOKI_AK" }}
       - name: loki.storage.bucketNames.chunks
-        value: {{ requiredEnv "LOKI_S3" }}
+        value: {{ env "LOKI_S3" }}
       - name: loki.storage.bucketNames.ruler
-        value: {{ requiredEnv "LOKI_S3" }}
+        value: {{ env "LOKI_S3" }}
       - name: loki.storage.bucketNames.admin
-        value: {{ requiredEnv "LOKI_S3" }}
+        value: {{ env "LOKI_S3" }}
       - name: loki.storage.s3.region
-        value: {{ requiredEnv "LOKI_REGION" }}
+        value: {{ env "LOKI_REGION" }}
       - name: loki.storage.s3.endpoint
-        value: {{ requiredEnv "LOKI_S3_EP" }}
+        value: {{ env "LOKI_S3_EP" }}
   - name: promtail
+    installed: true
     chart: grafana/promtail
     version: 6.15.3
     namespace: logging
@@ -33,6 +35,7 @@ releases:
     values:
     - ./charts/promtail/values.yaml
   - name: grafana
+    installed: true
     chart: grafana/grafana
     version: 6.61.1
     namespace: logging
@@ -44,7 +47,9 @@ releases:
       - name: ingress.tls[0].hosts[0]
         value: {{ requiredEnv "GRAFANA_FQDN" }}
   - name: prometheus-community
+    installed: true
     chart: prometheus-community/prometheus
+    version: 25.27.0
     namespace: logging
     values:
     - ./charts/p8s/values.yaml
