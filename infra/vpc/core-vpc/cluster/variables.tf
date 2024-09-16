@@ -2,7 +2,7 @@ data "opentelekomcloud_identity_project_v3" "current" {}
 
 variable "azs" {
   type = list
-  default = ["eu-nl-01", "eu-nl-02"]
+  default = ["eu-de-01", "eu-de-02"]
 }
 
 variable "metrics_version" {

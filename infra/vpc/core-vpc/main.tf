@@ -34,7 +34,7 @@ module "bastion" {
   vpc_id = module.vpc.vpc_id
   subnet_id = module.vpc.subnet_id
   network_id = module.vpc.network_id
-  az = "eu-nl-01"
+  az = "eu-de-01"
   key_name = module.key.key_name
 }
 
@@ -43,11 +43,11 @@ module "cce" {
   prefix = local.prefix
   vpc_id = module.vpc.vpc_id
   subnet_id = module.vpc.subnet_id
-  node_flavor = "c4.2xlarge.2"
+  node_flavor = "c4.xlarge.4"
   key_name = module.key.key_name
   scale_enabled = false
   node_os = "HCE OS 2.0"
-  cnt = "vpc-router"
+  cnt = "overlay_l2"
 }
 
 # module "dns" {

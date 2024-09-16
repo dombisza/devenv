@@ -1,0 +1,38 @@
+repositories:
+  - name: istio
+    url: https://istio-release.storage.googleapis.com/charts 
+releases:
+  - name: istio-base 
+    installed: {{ env "DEPLOY_ISTIO" | default "true" }}
+    chart: istio/base 
+    namespace: {{ env "NAMESPACE" | default "istio-system" }} 
+    set:
+      - name: defaultRevision
+        value: default
+  - name: istiod 
+    installed: {{ env "DEPLOY_ISTIO" | default "true" }}
+    chart: istio/istiod
+    namespace: {{ env "NAMESPACE" | default "istio-system" }} 
+    values:
+    - ./istiod/values.yaml
+  - name: cni 
+    installed: {{ env "DEPLOY_ISTIO" | default "true" }}
+    chart: istio/cni 
+    namespace: {{ env "NAMESPACE" | default "istio-system" }} 
+    values:
+    - ./cni/values.yaml
+  - name: ztunnel 
+    installed: {{ env "DEPLOY_ISTIO" | default "true" }}
+    chart: istio/ztunnel 
+    namespace: {{ env "NAMESPACE" | default "istio-system" }} 
+    values:
+    - ./ztunnel/values.yaml
+  - name: gateway 
+    installed: {{ env "DEPLOY_ISTIO" | default "true" }}
+    chart: istio/gateway 
+    namespace: {{ env "NAMESPACE" | default "istio-system" }} 
+    values:
+    - ./gateway/values.yaml
+helmDefaults:
+    reuseValues: true
+    createNamespace: true 

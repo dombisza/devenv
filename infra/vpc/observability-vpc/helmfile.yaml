@@ -5,52 +5,52 @@ repositories:
     url: https://prometheus-community.github.io/helm-charts
 releases:
   - name: loki
-    installed: false
+    installed: {{ env "DEPLOY_LOGGING" | default "true" }}
     chart: grafana/loki
     version: 5.36.0
-    namespace: logging
+    namespace: {{ env "NAMESPACE" | default "sre" }} 
     values:
     - ./charts/loki/values.yaml
     set:
       - name: loki.storage.s3.secretAccessKey
-        value: {{ env "LOKI_SK" }}
+        value: {{ env "LOKI_SK" | default "null" }}
       - name: loki.storage.s3.accessKeyId
-        value: {{ env "LOKI_AK" }}
+        value: {{ env "LOKI_AK" | default "null" }}
       - name: loki.storage.bucketNames.chunks
-        value: {{ env "LOKI_S3" }}
+        value: {{ env "LOKI_S3" | default "otc-s3-bucket" }}
       - name: loki.storage.bucketNames.ruler
-        value: {{ env "LOKI_S3" }}
+        value: {{ env "LOKI_S3" | default "ots-s3-bucket" }}
       - name: loki.storage.bucketNames.admin
-        value: {{ env "LOKI_S3" }}
+        value: {{ env "LOKI_S3" | default "otc-s3-bucket" }}
       - name: loki.storage.s3.region
-        value: {{ env "LOKI_REGION" }}
+        value: {{ env "LOKI_REGION" | default "eu-de" }}
       - name: loki.storage.s3.endpoint
-        value: {{ env "LOKI_S3_EP" }}
+        value: {{ env "LOKI_S3_EP" | default "https://obs.eu-de.otc.t-systems.com" }}
   - name: promtail
-    installed: true
+    installed: {{ env "DEPLOY_METRICS" | default "true" }} 
     chart: grafana/promtail
     version: 6.15.3
-    namespace: logging
+    namespace: {{ env "NAMESPACE" | default "sre" }}
     recreatePods: true
     values:
     - ./charts/promtail/values.yaml
   - name: grafana
-    installed: true
+    installed: {{ env "DEPLOY_GRAFANA" | default "true" }} 
     chart: grafana/grafana
     version: 6.61.1
-    namespace: logging
+    namespace: {{ env "NAMESPACE" | default "sre" }}
     values:
     - ./charts/grafana/values.yaml
     set:
       - name: ingress.hosts[0]
-        value: {{ requiredEnv "GRAFANA_FQDN" }}
+        value: {{ env "GRAFANA_FQDN" | default "grafana.cluster.local" }}
       - name: ingress.tls[0].hosts[0]
-        value: {{ requiredEnv "GRAFANA_FQDN" }}
+        value: {{ env "GRAFANA_FQDN" | default "grafana.cluster.local" }}
   - name: prometheus-community
-    installed: true
+    installed: {{ env "DEPLOY_METRICS" | default "true" }}
     chart: prometheus-community/prometheus
     version: 25.27.0
-    namespace: logging
+    namespace: {{ env "NAMESPACE" | default "sre" }}
     values:
     - ./charts/p8s/values.yaml
 helmDefaults:

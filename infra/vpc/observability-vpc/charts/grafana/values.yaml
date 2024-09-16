@@ -57,33 +57,6 @@ dashboardProviders:
         path: /var/lib/grafana/dashboards/grafana-dashboards-kubernetes
 dashboards:
   grafana-dashboards-kubernetes:
-    # kube1:
-      # gnetId: 12740
-      # darasource: Prometheus
-    # kube2:
-      # gnetId: 12124
-      # datasource: Prometheus
-    # kube3:
-      # gnetId: 12661
-      # datasource: Prometheus
-    coredns:
-      gnetId: 14981
-      datasource: Prometheus
-      revision: 2
-    cluster:
-      gnetId: 3119
-      datasource: Prometheus
-    pod:
-      gnetId: 6417
-      datasource: Prometheus
-    node:
-      gnetId: 15759
-      datasource: Prometheus
-    k8s-views-global:
-      url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-global.json
+    kube-api-monitor:
+      url: https://raw.githubusercontent.com/opentelekomcloud-community/cce-grafana-dashboards/main/kube-api/kube-api-mon.json 
       token: ''
-    k8s-views-namespaces:
-      url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-namespaces.json
-      token: ''
-
-#TODO ADD 12740 12124 12661
