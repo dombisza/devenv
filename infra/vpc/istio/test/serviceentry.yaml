@@ -1,0 +1,29 @@
+apiVersion: networking.istio.io/v1
+kind: ServiceEntry
+metadata:
+  labels:
+    istio.io/use-waypoint: waypoint
+  name: istio-egress
+  namespace: istio-egress
+spec:
+  hosts:
+  - httpbin.org
+  location: MESH_EXTERNAL
+  ports:
+  - name: http
+    number: 80
+    protocol: HTTP
+    targetPort: 443
+  resolution: DNS
+---
+# New: add TLS to requests to `httpbin.org`
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: httpbin.org-tls
+  namespace: istio-egress
+spec:
+  host: httpbin.org
+  trafficPolicy:
+    tls:
+      mode: SIMPLE

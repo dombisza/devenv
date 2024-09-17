@@ -9,6 +9,8 @@ releases:
     set:
       - name: defaultRevision
         value: default
+    values:
+      - ./istio-base/values.yaml
   - name: istiod 
     installed: {{ env "DEPLOY_ISTIO" | default "true" }}
     chart: istio/istiod

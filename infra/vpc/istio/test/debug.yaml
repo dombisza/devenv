@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debug-container
+  namespace: istio-egress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: debug-container
+  template:
+    metadata:
+      labels:
+        app: debug-container
+    spec:
+      containers:
+      - name: debug-container
+        image: ghcr.io/opentelekomcloud-community/debug-container:main
+        command: ["sleep", "99999"]
+      restartPolicy: Always
+

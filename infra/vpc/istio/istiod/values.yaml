@@ -1,1 +1,8 @@
 profile: "ambient"
+istio_cni:
+  enabled: true
+  chained: true
+pilot:
+  env:
+    PILOT_ENABLE_IP_AUTOALLOCATE: true
+

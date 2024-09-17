@@ -56,6 +56,42 @@ resource "opentelekomcloud_cce_node_pool_v3" "this" {
     volumetype = "SSD"
   }
 }
+# egress pool for istio
+resource "opentelekomcloud_cce_node_pool_v3" "egress" {
+  availability_zone        = "eu-de-01" 
+  cluster_id               = opentelekomcloud_cce_cluster_v3.this.id
+  name                     = "${var.prefix}-nodepool-egress"
+  os                       = var.node_os
+  flavor                   = var.node_flavor
+  key_pair                 = var.key_name
+  scale_enable             = var.scale_enabled
+  initial_node_count       = 1 
+  min_node_count           = 1
+  max_node_count           = 1
+  scale_down_cooldown_time = var.scale_enabled ? 100 : null
+  priority                 = var.scale_enabled ? 1 : null
+  runtime                  = "containerd"
+  lifecycle {
+    create_before_destroy = true
+  }
+  root_volume {
+    size       = var.root_vol
+    volumetype = "SSD"
+  }
+  data_volumes {
+    size       = var.data_vol
+    volumetype = "SSD"
+  }
+  k8s_tags = {
+    egress = "true"
+  }
+  taints {
+    key = "egress"
+    value = "true"
+    effect = "NoSchedule"
+  }
+}
+
 
 ## [CCE KUBECONFIG]
 
