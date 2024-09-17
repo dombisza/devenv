@@ -1,3 +1,0 @@
-env:
-  PILOT_ENABLE_IP_AUTOALLOCATE: true
-profile: ambient
