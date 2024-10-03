@@ -1,0 +1,30 @@
+apiVersion: tf.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: default 
+spec:
+  configuration: |
+    provider "opentelekomcloud" {
+      domain_name = ""
+      tenant_name = ""
+      auth_url    = "https://iam.eu-de.otc.t-systems.com/v3"
+      user_name   = ""
+      password    = ""
+
+    }
+
+    // Modules _must_ use remote state. The provider does not persist state.
+    terraform {
+      required_providers {
+        opentelekomcloud = {
+           source = "opentelekomcloud/opentelekomcloud"
+           version = ">= 1.23.2"
+        }
+     }
+
+      backend "kubernetes" {
+        secret_suffix     = "providerconfig-default"
+        namespace         = "crossplane-system"
+        in_cluster_config = true
+      }
+    }
