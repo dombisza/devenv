@@ -1,0 +1,31 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: compositebuckets.example.org
+spec:
+  group: example.org
+  names:
+    kind: CompositeBucket
+    plural: compositebuckets
+  claimNames:
+    kind: Bucket
+    plural: buckets
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                parameters:
+                  type: object
+                  properties:
+                    bucketName:
+                      type: string
+                writeConnectionSecretToRef:
+                  type: object
+

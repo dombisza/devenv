@@ -1,0 +1,10 @@
+apiVersion: example.org/v1alpha1
+kind: Bucket
+metadata:
+  name: my-example-bucket
+spec:
+  parameters:
+    bucketName: "my-crossplane-bucket"
+  writeConnectionSecretToRef:
+    name: my-bucket-secret
+

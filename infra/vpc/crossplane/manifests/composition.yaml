@@ -1,0 +1,39 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: compositebucket-aws
+spec:
+  compositeTypeRef:
+    apiVersion: example.org/v1alpha1
+    kind: CompositeBucket
+  resources:
+    - name: terraform-workspace
+      base:
+        apiVersion: tf.upbound.io/v1beta1
+        kind: Workspace
+        metadata:
+          name: example-inline
+        spec:
+          forProvider:
+            source: Inline
+            module: |
+              // Outputs are written to the connection secret.
+              resource "random_id" "example" {
+                byte_length = 4
+              }
+
+              resource "opentelekomcloud_obs_bucket" "this" {
+                bucket = "crossplane-xrd-${terraform.workspace}-${random_id.example.hex}"
+                acl    = "private"
+              }
+          writeConnectionSecretToRef:
+            namespace: default
+            name: terraform-workspace-example-inline
+      patches:
+        - fromFieldPath: "spec.parameters.bucketName"
+          toFieldPath: "spec.forProvider.module"
+          transforms:
+            - type: string
+              string:
+                fmt: 'bucket = "%s"'
+
