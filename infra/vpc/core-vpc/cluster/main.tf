@@ -108,7 +108,7 @@ resource "opentelekomcloud_vpc_eip_v1" "this" {
   }
   bandwidth {
     name        = "${var.prefix}-kube-master"
-    size        = 8
+    size        = 300
     share_type  = "PER"
     charge_mode = "traffic"
   }

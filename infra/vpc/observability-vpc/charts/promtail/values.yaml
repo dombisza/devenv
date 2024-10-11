@@ -19,7 +19,7 @@ extraVolumeMounts:
     readOnly: true
 podSecurityContext:
   runAsUser: 0
-  runAsGroup: 4
+  runAsGroup: 0
 containerSecurityContext:
   readOnlyRootFilesystem: true
   capabilities:

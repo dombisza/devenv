@@ -1,3 +1,4 @@
+profile: ambient
 cni:
   ambient:
     enabled: true 

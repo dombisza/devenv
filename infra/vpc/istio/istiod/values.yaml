@@ -1,4 +1,4 @@
-profile: "ambient"
+profile: ambient
 istio_cni:
   enabled: true
   chained: true
