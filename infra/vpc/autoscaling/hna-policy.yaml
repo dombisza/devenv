@@ -1,0 +1,35 @@
+apiVersion: autoscaling.cce.io/v1alpha1
+kind: HorizontalNodeAutoscaler
+metadata:
+  generation: 2
+  name: policy-custom
+  namespace: kube-system
+spec:
+  disable: false
+  rules:
+  - action:
+      type: ScaleUp
+      unit: Node
+      value: 1
+    disable: false
+    metricTrigger:
+      metricName: Cpu
+      metricOperation: '>'
+      metricValue: "1"
+      unit: Percent
+    ruleName: rule58937
+    type: Metric
+  - action:
+      type: ScaleUp
+      unit: Node
+      value: 1
+    disable: false
+    metricTrigger:
+      metricName: Memory
+      metricOperation: '>'
+      metricValue: "1"
+      unit: Percent
+    ruleName: rule50290
+    type: Metric
+  targetNodepoolIds:
+  - 9cb3b3fb-8553-11ef-be1a-02550a10004a 
