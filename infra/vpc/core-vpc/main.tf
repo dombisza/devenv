@@ -45,7 +45,7 @@ module "cce" {
   subnet_id = module.vpc.subnet_id
   node_flavor = "c4.xlarge.4"
   key_name = module.key.key_name
-  scale_enabled = false
+  scale_enabled = true 
   node_os = "HCE OS 2.0"
   cnt = "overlay_l2"
 }

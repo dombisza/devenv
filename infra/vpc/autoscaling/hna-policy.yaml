@@ -15,7 +15,7 @@ spec:
     metricTrigger:
       metricName: Cpu
       metricOperation: '>'
-      metricValue: "1"
+      metricValue: "90"
       unit: Percent
     ruleName: rule58937
     type: Metric
@@ -27,9 +27,21 @@ spec:
     metricTrigger:
       metricName: Memory
       metricOperation: '>'
-      metricValue: "1"
+      metricValue: "90"
       unit: Percent
     ruleName: rule50290
     type: Metric
+  - action:
+      type: ScaleDown
+      unit: Node
+      value: 1
+    disable: false
+    metricTrigger:
+      metricName: Memory
+      metricOperation: '<'
+      metricValue: "80"
+      unit: Percent
+    ruleName: scalein
+    type: Metric
   targetNodepoolIds:
-  - 9cb3b3fb-8553-11ef-be1a-02550a10004a 
+  - 27e6d223-8c62-11ef-be1a-02550a10004a 

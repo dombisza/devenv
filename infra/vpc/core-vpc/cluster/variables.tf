@@ -7,17 +7,17 @@ variable "azs" {
 
 variable "metrics_version" {
   type = string
-  default = "1.3.37"
+  default = "1.3.60"
 }
 
 variable "autoscaler_version" {
   type = string
-  default = "1.27.53"
+  default = "1.29.17"
 }
 
 variable "everest_version" {
   type = string
-  default = "2.3.14"
+  default = "2.4.28"
 }
 
 variable "prefix" {}
@@ -59,9 +59,9 @@ variable "scale_enabled" {
 variable "scaling" {
   type = map(number)
   default = {
-    start = 1
+    start = 2
     min = 1
-    max = 1
+    max = 2
   }
 }
 
