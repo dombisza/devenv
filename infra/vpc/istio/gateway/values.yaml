@@ -1,11 +1,11 @@
 profile: "ambient"
 env:
   PILOT_ENABLE_IP_AUTOALLOCATE: true
-nodeSelector:
-  egress: "true"
-tolerations:
-- key: "egress"
-  operator: "Equal"
-  value: "true"
-  effect: "NoSchedule"
-
+# nodeSelector:
+  # egress: "true"
+# tolerations:
+# - key: "egress"
+  # operator: "Equal"
+  # value: "true"
+  # effect: "NoSchedule"
+#
