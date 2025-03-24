@@ -1,18 +1,18 @@
 ## [CCE CLUSTER]
 
 data "opentelekomcloud_cce_addon_template_v3" "autoscaler" {
-  addon_version = var.autoscaler_version 
+  addon_version = var.autoscaler_version
   addon_name    = "autoscaler"
 }
 
 data "opentelekomcloud_cce_addon_template_v3" "metrics" {
-  addon_version = var.metrics_version 
+  addon_version = var.metrics_version
   addon_name    = "metrics-server"
 }
 
 # data "opentelekomcloud_cce_addon_templates_v3" "everest" {
-  # cluster_version = var.everest_version
-  # addon_name      = "everest"
+# cluster_version = var.everest_version
+# addon_name      = "everest"
 # }
 
 resource "opentelekomcloud_cce_cluster_v3" "this" {
@@ -25,6 +25,7 @@ resource "opentelekomcloud_cce_cluster_v3" "this" {
   authentication_mode    = var.auth_type
   kube_proxy_mode        = var.proxy_mode
   eip                    = opentelekomcloud_vpc_eip_v1.this.publicip[0].ip_address
+  cluster_version        = var.cluster_version
 }
 
 ## [CCE NODEPOOLS]
@@ -44,6 +45,7 @@ resource "opentelekomcloud_cce_node_pool_v3" "this" {
   scale_down_cooldown_time = var.scale_enabled ? 100 : null
   priority                 = var.scale_enabled ? 1 : null
   runtime                  = "containerd"
+  #  postinstall              = "c3VkbyB5dW0gaW5zdGFsbCBvcGVuLWlzY3NpIC15ICYmIHN1ZG8gc3lzdGVtY3RsIGVuYWJsZSBpc2NzaWQgJiYgc3VkbyBzeXN0ZW1jdGwgc3RhcnQgaXNjc2lkCg=="
   lifecycle {
     create_before_destroy = true
   }
@@ -56,11 +58,10 @@ resource "opentelekomcloud_cce_node_pool_v3" "this" {
     volumetype = "SSD"
   }
 }
-# egress pool for istio
-# resource "opentelekomcloud_cce_node_pool_v3" "egress" {
+# resource "opentelekomcloud_cce_node_pool_v3" "gvisor" {
   # availability_zone        = "eu-de-01"
   # cluster_id               = opentelekomcloud_cce_cluster_v3.this.id
-  # name                     = "${var.prefix}-nodepool-egress"
+  # name                     = "${var.prefix}-nodepool-sandbox"
   # os                       = var.node_os
   # flavor                   = var.node_flavor
   # key_pair                 = var.key_name
@@ -83,15 +84,15 @@ resource "opentelekomcloud_cce_node_pool_v3" "this" {
     # volumetype = "SSD"
   # }
   # k8s_tags = {
-    # egress = "true"
+    # sandbox = "true"
   # }
   # taints {
-    # key = "egress"
-    # value = "true"
+    # key    = "sandbox"
+    # value  = "true"
     # effect = "NoSchedule"
   # }
 # }
-#
+
 
 ## [CCE KUBECONFIG]
 
@@ -140,23 +141,37 @@ resource "opentelekomcloud_cce_addon_v3" "autoscaler" {
       swr_addr = data.opentelekomcloud_cce_addon_template_v3.autoscaler.swr_addr
       swr_user = data.opentelekomcloud_cce_addon_template_v3.autoscaler.swr_user
     }
+    flavor = jsonencode({
+      "replicas" = 1
+      "resources" = [{
+        "name"        = "autoscaler"
+        "requestsCpu" = "100m"
+        "requestsMem" = "200Mi"
+        "limitsCpu"   = "500m"
+        "limitsMem"   = "500Mi"
+      }]
+    })
+
     custom = {
-      "cluster_id"                    = opentelekomcloud_cce_cluster_v3.this.id
-      "tenant_id"                     = data.opentelekomcloud_identity_project_v3.current.id
-      "coresTotal"                    = 16000
-      "expander"                      = "priority"
-      "logLevel"                      = 4
-      "maxEmptyBulkDeleteFlag"        = 11
-      "maxNodesTotal"                 = 6
-      "memoryTotal"                   = 64000
-      "scaleDownDelayAfterAdd"        = 15
-      "scaleDownDelayAfterDelete"     = 15
-      "scaleDownDelayAfterFailure"    = 3
-      "scaleDownEnabled"              = true
-      "scaleDownUnneededTime"         = 7
-      "scaleUpUnscheduledPodEnabled"  = true
-      "scaleUpUtilizationEnabled"     = true
-      "unremovableNodeRecheckTimeout" = 7
+      "cluster_id"                        = opentelekomcloud_cce_cluster_v3.this.id
+      "tenant_id"                         = data.opentelekomcloud_identity_project_v3.current.id
+      "coresTotal"                        = 40
+      "expander"                          = "priority"
+      "logLevel"                          = 4
+      "maxEmptyBulkDeleteFlag"            = 11
+      "maxNodesTotal"                     = 10
+      "memoryTotal"                       = 120
+      "scaleDownDelayAfterAdd"            = 5
+      "scaleDownDelayAfterDelete"         = 5
+      "scaleDownDelayAfterFailure"        = 3
+      "scaleDownEnabled"                  = true
+      "scaleDownUnneededTime"             = 5
+      "scaleUpUnscheduledPodEnabled"      = true
+      "scaleUpUtilizationEnabled"         = true
+      "unremovableNodeRecheckTimeout"     = 5
+      "scaleDownUtilizationThreshold"     = 0.75
+      "maxEmptyBulkDeleteFlag"            = 1
+      "skipNodesWithCustomControllerPods" = false
     }
   }
 }

@@ -7,12 +7,12 @@ variable "azs" {
 
 variable "metrics_version" {
   type = string
-  default = "1.3.60"
+  default = "1.3.68"
 }
 
 variable "autoscaler_version" {
   type = string
-  default = "1.29.17"
+  default = "1.30.18"
 }
 
 variable "everest_version" {
@@ -60,7 +60,7 @@ variable "scaling" {
   type = map(number)
   default = {
     start = 2
-    min = 1
+    min = 2
     max = 2
   }
 }
@@ -73,4 +73,8 @@ variable "root_vol" {
 variable "data_vol" {
   type = number
   default = 100
+}
+
+variable "cluster_version" {
+  default = null
 }

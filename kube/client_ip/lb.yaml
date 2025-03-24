@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  annotations:
+    kubernetes.io/elb.id: "89554583-ce09-4b13-b5a2-d1b424056852" 
+    kubernetes.io/elb.class: union 
+    kubernetes.io/elb.transparent-client-ip: 'true'
+spec:
+  selector:
+     app: nginx
+  externalTrafficPolicy: Local
+  ports:
+  - name: service0
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  type: LoadBalancer

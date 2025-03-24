@@ -43,11 +43,13 @@ module "cce" {
   prefix = local.prefix
   vpc_id = module.vpc.vpc_id
   subnet_id = module.vpc.subnet_id
-  node_flavor = "c4.xlarge.4"
+  node_flavor = "c4.xlarge.2"
   key_name = module.key.key_name
   scale_enabled = true 
   node_os = "HCE OS 2.0"
+  #cnt = "vpc-router"
   cnt = "overlay_l2"
+  cluster_version = "v1.30"
 }
 
 # module "dns" {

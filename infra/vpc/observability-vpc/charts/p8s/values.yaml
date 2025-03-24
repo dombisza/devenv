@@ -5,6 +5,8 @@ persistence:
   enabled: true
   storageClassName: csi-disk-topology
 server:
+  persistentVolume:
+    storageClass: csi-disk-topology
   resources:
     requests:
       cpu: 1000m
@@ -12,6 +14,9 @@ server:
   replicaCount: 1
   statefulSet:
     enabled: true
+kube-state-metrics:      
+  metricLabelsAllowlist:
+    - nodes=[*]
 # extraScrapeConfigs: |
   # - job_name: node-exporter
     # relabel_configs:
