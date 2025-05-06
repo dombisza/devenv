@@ -59,9 +59,9 @@ variable "scale_enabled" {
 variable "scaling" {
   type = map(number)
   default = {
-    start = 2
-    min = 2
-    max = 2
+    start = 8
+    min = 8
+    max = 8
   }
 }
 
