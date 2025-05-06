@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dns-test-config
+data:
+  domains: |
+    example.com
+    google.com
+    cloudflare.com
+    sdombi.hu
+    index.hu
+    telex.hu
+    microsoft.com
+    github.com
+    coredns.io
+    kubernetes.io

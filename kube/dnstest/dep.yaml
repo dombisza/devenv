@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dns-tester
+  labels:
+    app: dns-tester
+spec:
+  replicas: 40
+  selector:
+    matchLabels:
+      app: dns-tester
+  template:
+    metadata:
+      labels:
+        app: dns-tester
+    spec:
+      containers:
+        - name: dns-tester
+          image: busybox
+          command:
+            - /bin/sh
+            - -c
+            - |
+              while true; do
+                echo "Running DNS tests at $(date)"
+                while read -r domain; do
+                  ERROR_MSG=$(nslookup "$domain" 2>&1 >/dev/null)
+                  if [ $? -ne 0 ]; then
+                    echo "$(date) - ERROR $domain: $ERROR_MSG"
+                  else
+                    echo "$(date) - OK $domain"
+                  fi
+                done < /config/domains.txt
+                sleep 0.1
+              done
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+              readOnly: true
+      volumes:
+        - name: config-volume
+          configMap:
+            name: dns-test-config
+            items:
+              - key: domains
+                path: domains.txt
+

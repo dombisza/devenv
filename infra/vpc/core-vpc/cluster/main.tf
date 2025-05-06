@@ -57,42 +57,45 @@ resource "opentelekomcloud_cce_node_pool_v3" "this" {
     size       = var.data_vol
     volumetype = "SSD"
   }
-}
-resource "opentelekomcloud_cce_node_pool_v3" "gvisor" {
-  availability_zone        = "eu-de-03"
-  cluster_id               = opentelekomcloud_cce_cluster_v3.this.id
-  name                     = "${var.prefix}-nodepool-sandbox"
-  os                       = var.node_os
-  flavor                   = "s3.xlarge.2" 
-  key_pair                 = var.key_name
-  scale_enable             = var.scale_enabled
-  initial_node_count       = 4
-  min_node_count           = 4
-  max_node_count           = 4
-  scale_down_cooldown_time = var.scale_enabled ? 100 : null
-  priority                 = var.scale_enabled ? 1 : null
-  runtime                  = "containerd"
-  lifecycle {
-    create_before_destroy = true
-  }
-  root_volume {
-    size       = var.root_vol
-    volumetype = "SSD"
-  }
-  data_volumes {
-    size       = var.data_vol
-    volumetype = "SSD"
-  }
   k8s_tags = {
-    sandbox = "true"
+    role = "general"
   }
+}
+# resource "opentelekomcloud_cce_node_pool_v3" "gvisor" {
+  # availability_zone        = "eu-de-03"
+  # cluster_id               = opentelekomcloud_cce_cluster_v3.this.id
+  # name                     = "${var.prefix}-nodepool-sandbox"
+  # os                       = var.node_os
+  # flavor                   = "s3.xlarge.2"
+  # key_pair                 = var.key_name
+  # scale_enable             = var.scale_enabled
+  # initial_node_count       = 4
+  # min_node_count           = 4
+  # max_node_count           = 4
+  # scale_down_cooldown_time = var.scale_enabled ? 100 : null
+  # priority                 = var.scale_enabled ? 1 : null
+  # runtime                  = "containerd"
+  # lifecycle {
+    # create_before_destroy = true
+  # }
+  # root_volume {
+    # size       = var.root_vol
+    # volumetype = "SSD"
+  # }
+  # data_volumes {
+    # size       = var.data_vol
+    # volumetype = "SSD"
+  # }
+  # k8s_tags = {
+    # sandbox = "true"
+  # }
   # taints {
     # key    = "sandbox"
     # value  = "true"
     # effect = "NoSchedule"
   # }
-}
-#
+# }
+
 
 ## [CCE KUBECONFIG]
 
